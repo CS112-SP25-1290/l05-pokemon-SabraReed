@@ -1,7 +1,36 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Arrays;
 
 class Main {
 	public static void main(String[] args) {
+
+		// Pokemon pika = new Pokemon("Pikachu", "Electric");
+
+		// Pokemon pikaClone = new Pokemon(pika);
+
+		// System.out.println("Copy test complete");
+
+		// Pokemon badClone = new Pokemon(null);
+
+		// try {
+		// 	Pokemon goodPokemon = new Pokemon("Pikachu", "Electric", null);
+		// 	System.out.println("Good Pokemon test");
+		// 	//Pokemon badPokemon1 = new Pokemon("", "Electric", null);
+		// 	System.out.println("Bad Pokemon test 1");
+		// 	//Pokemon badPokemon2 = new Pokemon("Pikachu", "Garbage", null);
+		// 	System.out.println("Bad Pokemon test 2");
+		// 	//Pokemon badPokemon3 = new Pokemon("Pikachu", "Electric", "Garbage");
+		// 	System.out.println("Bad Pokemon test 3");
+		// 	//Pokemon badPokemon4 = new Pokemon("Pikachu", null, null);
+		// 	System.out.println("Bad Pokemon test 4");
+		// } catch(IllegalArgumentException iae) {
+		// 	iae.printStackTrace();
+		// 	System.exit(0);
+		// } finally {
+		// 	System.out.println("End of test");
+		// }
+		
 		// DECLARATION + INITIALIZATION
 		int choice = -1;
 		boolean tryAgain = true;
@@ -26,8 +55,11 @@ class Main {
 		System.out.println(myBox);
 
 		//INPUT + PROCESSING + OUTPUT
+
 		do {
-			System.out.println("\nMAIN MENU\nWhat would you like to do?");
+
+			try{
+				System.out.println("\nMAIN MENU\nWhat would you like to do?");
 			System.out.println("\t1) Add a New Pokemon \n\t2) List All Pokemon \n\t3) Exit Program \n");
 			System.out.print("Enter choice number> ");
 			choice = keyboard.nextInt(); //could throw exception here and skip rest of code
@@ -44,20 +76,33 @@ class Main {
 				String type2 = keyboard.nextLine();
 				type2 = (type2.equalsIgnoreCase("none")) ? null : type2;
 
+				
 				Pokemon p = new Pokemon(name, type1, type2);
-				myBox.add(p); //could throw exception here and skip rest of code
+					
+					myBox.add(p); //could throw exception here and skip rest of code
+					System.out.println("\n" + name + " added!");
+					
+				} else if (choice == 2) {
+					System.out.println(myBox);
+				} else if (choice == 3) {
+					keyboard.close();
+					tryAgain = false;
+				} else {
+					System.out.println("Invalid choice, please pick a valid option from the menu.\n");
+				}
 
-				System.out.println("\n" + name + " added!");
-			} else if (choice == 2) {
-				System.out.println(myBox);
-			} else if (choice == 3) {
-				keyboard.close();
-				tryAgain = false;
-			} else {
-				System.out.println("Invalid choice, please pick a valid option from the menu.\n");
-			}
+				} catch (InputMismatchException ime) {
+					System.out.println("\nInvalid choice, please pick valid option as an integer.");
+					keyboard.nextLine();
+				} catch (IllegalArgumentException iaee) {
+					System.out.println("\nInvalid Name, Type #1, and/or Type #2. Please try again." + "\n\n" + Arrays.toString(Pokemon.TYPES));
+					//System.out.println(Arrays.toString(Pokemon.TYPES));
+				} catch (PokemonAlreadyExistsException paee) {
+					System.out.println("\n" + paee.getMessage());
+				}
+
 		} while (tryAgain);
 
 		System.out.println("Thank you for using the Pokemon Box program :D see you later!");
-	}
+ 	}
 }
